@@ -47,7 +47,6 @@ func main() {
 	foundCategoryUUID := ""
 	for _, category := range showcaseMain.Categories {
 		for _, subCategory := range category.Categories {
-			fmt.Println(subCategory.Name)
 			if subCategory.Name == *targetCategory {
 				foundCategoryUUID = subCategory.UUID
 			}
