@@ -32,6 +32,20 @@ func NewClient() *Client {
 	}
 }
 
+func (c *Client) SetProxy(proxyURL string) error {
+	parsedURL, err := url.Parse(proxyURL)
+	if err != nil {
+		return err
+	}
+
+	c.httpClient.Transport = &http.Transport{
+		Proxy:   http.ProxyURL(parsedURL),
+		DialTLS: samokatDial,
+	}
+
+	return nil
+}
+
 func (c *Client) setBasicHeaders(req *http.Request) {
 	req.Header.Set("systemversion", "7.1.2")
 	req.Header.Set("x-user-id", c.userID)
@@ -79,7 +93,7 @@ func (c *Client) GetOauthToken() (GetOAuthTokenResp, error) {
 	if err != nil {
 		return GetOAuthTokenResp{}, err
 	}
-
+	fmt.Println(string(respBody))
 	var getOAuthTokenRespnResp GetOAuthTokenResp
 	err = json.Unmarshal(respBody, &getOAuthTokenRespnResp)
 	if err != nil {
